@@ -768,3 +768,14 @@ async def help_command(ctx: discord.ApplicationContext):
     await ctx.respond(embed=embed, ephemeral=True)
 
 bot.run(os.getenv("DISCORD_TOKEN"))
+
+from flask import Flask
+
+app = Flask("")
+
+@app.route("/")
+def home():
+    return "Bot running"
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
