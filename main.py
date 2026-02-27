@@ -126,7 +126,20 @@ class SetupLogChannelView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=60)
 
-    @discord.ui.channel_select(placeholder="Select log channel", channel_types=[discord.ChannelType.text], min_values=1, max_values=1)
+    @discord.ui.select(
+    cls=discord.ui.ChannelSelect,
+    placeholder="Select log channel",
+    channel_types=[discord.ChannelType.text],
+    min_values=1,
+    max_values=1
+)
+async def select_log(self, interaction: discord.Interaction, select: discord.ui.ChannelSelect):
+    config["log_channel"] = select.values[0].id
+    save_config(config)
+    await interaction.response.send_message(
+        "✅ Setup complete! All configurations saved.",
+        ephemeral=True
+    )
     async def select_log(self, select: discord.ui.ChannelSelect, interaction: discord.Interaction):
         config["log_channel"] = select.values[0].id
         save_config(config)
