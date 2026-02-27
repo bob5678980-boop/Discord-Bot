@@ -111,7 +111,12 @@ class SetupChannelsView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=60)
 
-    @discord.ui.channel_select(placeholder="Select approved channels", channel_types=[discord.ChannelType.text], min_values=1, max_values=10)
+    @discord.ui.select(
+    cls=discord.ui.ChannelSelect,
+    channel_types=[discord.ChannelType.text],
+    min_values=1,
+    max_values=10
+)
     async def select_channels(self, select: discord.ui.ChannelSelect, interaction: discord.Interaction):
         config["allowed_channels"] = [channel.id for channel in select.values]
         save_config(config)
