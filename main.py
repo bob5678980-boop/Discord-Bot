@@ -145,7 +145,7 @@ class SetupLogChannelView(discord.ui.View):
         save_config(config)
         await interaction.response.send_message("✅ Setup complete! All configurations saved.", ephemeral=True)
 
-@bot.tree.command(name="setup", description="Configure bot roles and channels (Admin only)")
+@bot.slash_command(name="setup", description="Configure bot roles and channels (Admin only)")
 @commands.has_permissions(administrator=True)
 async def setup(ctx: discord.ApplicationContext):
     await ctx.respond("🔧 **Bot Setup**\nStep 1: Select which ranks are capable of running commands (other than startup).", view=SetupRolesView(), ephemeral=True)
@@ -424,8 +424,8 @@ async def on_ready():
     print("------")
     print("Bot is ready!")
     await bot.sync_commands()
-
-@bot.tree.command(name="earlyaccess", description="Release early access for special roles")
+    
+@bot.slash_command (name="earlyaccess", description="Release early access for special roles")
 async def earlyaccess(
     ctx: discord.ApplicationContext,
     session_link: discord.Option(str, description="Link to join the session", required=True)
@@ -481,7 +481,7 @@ async def earlyaccess(
     current_session["earlyaccess_message_id"] = msg.id
     await log_action(ctx.guild, f"🚀 **{ctx.author.display_name}** released Early Access.")
 
-@bot.tree.command(name="release", description="Release a new session for players to join")
+@bot.slash_command(name="release", description="Release a new session for players to join")
 async def release(
     ctx: discord.ApplicationContext,
     frp: discord.Option(str, description="FRP speed limit (e.g., '80' or '90')", required=True),
@@ -557,7 +557,7 @@ async def release(
     current_session["release_message_id"] = msg.id
     await log_action(ctx.guild, f"📢 **{ctx.author.display_name}** released the session to everyone.")
 
-@bot.tree.command(name="startup", description="Announce session startup with reaction requirements")
+@bot.slssh_command(name="startup", description="Announce session startup with reaction requirements")
 async def startup(
     ctx: discord.ApplicationContext,
     reactions: discord.Option(str, description="Number of reactions needed to start the session", required=True)
@@ -618,7 +618,7 @@ async def startup(
     await msg.add_reaction("✅")
     await log_action(ctx.guild, f"🛠️ **{ctx.author.display_name}** started a session startup with **{reactions}** reactions needed.")
 
-@bot.tree.command(name="clear", description="Clear/abort the current startup")
+@bot.slash_command(name="clear", description="Clear/abort the current startup")
 async def clear(ctx: discord.ApplicationContext):
     if not is_allowed_channel(ctx):
         return await ctx.respond("❌ This command cannot be used in this channel.", ephemeral=True)
@@ -658,7 +658,7 @@ async def clear(ctx: discord.ApplicationContext):
     await ctx.respond("✅ Startup has been cleared. You can now use `/startup` to begin a new session.", ephemeral=True)
     await log_action(ctx.guild, f"🗑️ **{ctx.author.display_name}** cleared the active startup.")
 
-@bot.tree.command(name="over", description="End the session and show duration")
+@bot.slash_command(name="over", description="End the session and show duration")
 async def over(ctx: discord.ApplicationContext):
     if not is_allowed_channel(ctx):
         return await ctx.respond("❌ This command cannot be used in this channel.", ephemeral=True)
@@ -744,12 +744,12 @@ async def over(ctx: discord.ApplicationContext):
     current_session["setting_up_sent"] = False
     await log_action(ctx.guild, f"🏁 **{ctx.author.display_name}** ended the session. Duration: {duration_text}")
 
-@bot.tree.command(name="ping", description="Check if the bot is online")
+@bot.slash_command(name="ping", description="Check if the bot is online")
 async def ping(ctx: discord.ApplicationContext):
     latency = round(bot.latency * 1000)
     await ctx.respond(f"Pong! Latency: {latency}ms", ephemeral=True)
 
-@bot.tree.command(name="help", description="Show available commands")
+@bot.slash_command(name="help", description="Show available commands")
 async def help_command(ctx: discord.ApplicationContext):
     embed = discord.Embed(
         title="Session Bot Help",
