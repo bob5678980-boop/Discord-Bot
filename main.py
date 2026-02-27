@@ -96,7 +96,12 @@ class SetupRolesView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=60)
 
-    @discord.ui.role_select(placeholder="Select ranks for bot commands", min_values=1, max_values=10)
+    @discord.ui.select(
+    cls=discord.ui.RoleSelect,
+    placeholder="Select ranks for bot commands",
+    min_values=1,
+    max_values=10
+)
     async def select_roles(self, select: discord.ui.RoleSelect, interaction: discord.Interaction):
         config["allowed_roles"] = [role.id for role in select.values]
         save_config(config)
