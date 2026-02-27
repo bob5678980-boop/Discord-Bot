@@ -12,7 +12,7 @@ intents = discord.Intents.default()
 intents.members = True
 intents.message_content = True
 
-bot = discord.Bot(intents=intents)
+bot = commands.Bot(command_prefix="!", intents=intents)
 
 # Persistent configuration
 CONFIG_FILE = "config.json"
